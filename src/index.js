@@ -1288,7 +1288,8 @@ const htmlContent = `
                                 display: 'flex',
                                 alignItems: 'center'
                             }}>
-                                🌐 {t.language}</span>
+                                🌐 {t.language}
+                                </span>
                             <button
                                 className={"tab " + (language === 'zh' ? 'active' : '')}
                                 onClick={() => setLanguage('zh')}
