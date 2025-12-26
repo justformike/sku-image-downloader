@@ -1029,7 +1029,7 @@ const htmlContent = `
                 });
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    throw new Error("HTTP " + response.status + ": " + response.statusText);
                 }
                 
                 return await response.blob();
