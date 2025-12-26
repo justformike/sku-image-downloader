@@ -1,6 +1,6 @@
 name = "sku-image-downloader"
 main = "src/index.js"
-compatibility_date = "2024-11-01"
+compatibility_date = "2024-12-01"
 
 # 部署到 Cloudflare Workers
 [env.production]
