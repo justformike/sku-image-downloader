@@ -660,7 +660,7 @@ const htmlContent = `
                 selectedFile: "已选择：",
                 supportedFormats: "支持 CSV, XLS, XLSX 格式",
                 pasteData: "粘贴数据（第一行为表头）",
-                placeholder: "SKU    URL1    URL2    URL3\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
+                placeholder: "SKU    URL1    URL2    URL3\\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
                 delimiter: "数据分隔符",
                 delimiterTab: "制表符 (Tab)",
                 delimiterComma: "逗号 (,)",
@@ -709,7 +709,7 @@ const htmlContent = `
                 selectedFile: "Selected:",
                 supportedFormats: "Supports CSV, XLS, XLSX formats",
                 pasteData: "Paste Data (First row as header)",
-                placeholder: "SKU    URL1    URL2    URL3\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
+                placeholder: "SKU    URL1    URL2    URL3\\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
                 delimiter: "Data Delimiter",
                 delimiterTab: "Tab",
                 delimiterComma: "Comma (,)",
@@ -758,7 +758,7 @@ const htmlContent = `
                 selectedFile: "Seleccionado:",
                 supportedFormats: "Soporta formatos CSV, XLS, XLSX",
                 pasteData: "Pegar Datos (Primera fila como encabezado)",
-                placeholder: "SKU    URL1    URL2    URL3\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
+                placeholder: "SKU    URL1    URL2    URL3\\nA123    https://example.com/img1.jpg    https://example.com/img2.jpg    https://example.com/img3.jpg\\nB456    https://example.com/img4.jpg    https://example.com/img5.jpg    https://example.com/img6.jpg",
                 delimiter: "Delimitador de Datos",
                 delimiterTab: "Tabulación (Tab)",
                 delimiterComma: "Coma (,)",
@@ -918,14 +918,14 @@ const htmlContent = `
                 }
 
                 const delimiters = {
-                    'tab': '\t',
+                    'tab': '\\t',
                     'comma': ',',
                     'semicolon': ';',
                     'pipe': '|'
                 };
 
                 const sep = delimiters[delimiter];
-                const lines = textData.trim().split('\n');
+                const lines = textData.trim().split('\\n');
                 const headers = lines[0].split(sep).map(h => h.trim());
                 
                 const data = lines.slice(1).map(line => {
@@ -963,7 +963,7 @@ const htmlContent = `
                         if (key === urlColumn) return true;
                         
                         // Pattern match: URL1, URL2, etc.
-                        if (keyLower.startsWith(urlColumnLower) && /\d*$/.test(key)) return true;
+                        if (keyLower.startsWith(urlColumnLower) && /\\d*$/.test(key)) return true;
                         
                         // Pattern match: URL_1, URL_2, etc.
                         if (keyLower.startsWith(urlColumnLower + '_')) return true;
@@ -973,8 +973,8 @@ const htmlContent = `
                     
                     // Sort columns to maintain order (URL, URL1, URL2, ...)
                     urlColumns.sort((a, b) => {
-                        const aNum = parseInt(a.replace(/\D/g, '') || '0');
-                        const bNum = parseInt(b.replace(/\D/g, '') || '0');
+                        const aNum = parseInt(a.replace(/\\D/g, '') || '0');
+                        const bNum = parseInt(b.replace(/\\D/g, '') || '0');
                         return aNum - bNum;
                     });
                     
@@ -1036,7 +1036,7 @@ const htmlContent = `
             };
 
             const getFileExtension = (url) => {
-                const match = url.match(/\.(jpg|jpeg|png|gif|webp|bmp)(\?|$)/i);
+                const match = url.match(/\\.(jpg|jpeg|png|gif|webp|bmp)(\\?|$)/i);
                 return match ? match[1].toLowerCase() : 'jpg';
             };
 
@@ -1091,7 +1091,7 @@ const htmlContent = `
                             // Download image
                             const blob = await downloadImage(task.url);
                             const ext = getFileExtension(task.url);
-                            const fileName = task.sku + "_" + String(task.index).padStart(2, '0') + ".jpg";
+                            const fileName = task.sku + "_" + String(task.index + 1).padStart(2, '0') + "." + ext;
 
                             // Write file
                             const fileHandle = await skuFolderHandle.getFileHandle(fileName, { create: true });
@@ -1192,7 +1192,7 @@ const htmlContent = `
 
                         const blob = await downloadImage(task.url);
                         const ext = getFileExtension(task.url);
-                        const fileName = task.sku + "_" + String(task.index).padStart(2, '0') + ".jpg";
+                        const fileName = task.sku + "_" + String(task.index + 1).padStart(2, '0') + "." + ext;
 
                         const fileHandle = await skuFolderHandle.getFileHandle(fileName, { create: true });
                         const writable = await fileHandle.createWritable();
@@ -1260,9 +1260,9 @@ const htmlContent = `
                 const csvContent = [
                     headers,
                     ...summary.errors.map(e => [e.sku, e.url, e.error])
-                ].map(row => row.join(',')).join('\n');
+                ].map(row => row.join(',')).join('\\n');
 
-                const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+                const blob = new Blob(['\\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = "error_log_" + new Date().getTime() + ".csv";
@@ -1289,23 +1289,23 @@ const htmlContent = `
                                 alignItems: 'center'
                             }}>
                                 🌐 {t.language}
-                                </span>
+                            </span>
                             <button
-                                className={"tab " + (language === 'zh' ? 'active' : '')}
+                                className={\`tab \${language === 'zh' ? 'active' : ''}\`}
                                 onClick={() => setLanguage('zh')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
                                 中文
                             </button>
                             <button
-                                className={"tab " + (language === 'en' ? 'active' : '')}
+                                className={\`tab \${language === 'en' ? 'active' : ''}\`}
                                 onClick={() => setLanguage('en')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
                                 English
                             </button>
                             <button
-                                className={"tab " + (language === 'es' ? 'active' : '')}
+                                className={\`tab \${language === 'es' ? 'active' : ''}\`}
                                 onClick={() => setLanguage('es')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
@@ -1333,13 +1333,13 @@ const htmlContent = `
                         
                         <div className="tabs">
                             <button 
-                                className={"tab " + (activeTab === 'file' ? 'active' : '')}
+                                className={\`tab \${activeTab === 'file' ? 'active' : ''}\`}
                                 onClick={() => setActiveTab('file')}
                             >
                                 📄 {t.fileUpload}
                             </button>
                             <button 
-                                className={"tab " + (activeTab === 'text' ? 'active' : '')}
+                                className={\`tab \${activeTab === 'text' ? 'active' : ''}\`}
                                 onClick={() => setActiveTab('text')}
                             >
                                 📝 {t.textPaste}
@@ -1491,14 +1491,14 @@ const htmlContent = `
                             {(isDownloading || isPaused || summary) && (
                                 <div className="progress-section">
                                     <div className="progress-bar-container">
-                                        <div className="progress-bar" style={{width: progress + "%"}}>
+                                        <div className="progress-bar" style={{width: progress + '%'}}>
                                         </div>
                                         <div className="progress-text">
                                             {progress.toFixed(1)}%
                                         </div>
                                     </div>
                                     <div style={{textAlign: 'center', color: 'var(--text-secondary)'}}>
-                                        {tasks.filter(function(tk) { return tk.status === 'success'; }).length} / {tasks.length} {t.completed}
+                                        {tasks.filter(t => t.status === 'success').length} / {tasks.length} {t.completed}
                                     </div>
                                 </div>
                             )}
@@ -1506,20 +1506,18 @@ const htmlContent = `
                             {tasks.length > 0 && (
                                 <div className="task-list">
                                     <h3 style={{marginBottom: '16px', color: 'var(--text-primary)'}}>📋 {t.taskList}</h3>
-                                    {tasks.map(function(task, index) {
-                                        return (
-                                            <div key={task.id} className={"task-item " + task.status}>
-                                                <div className={"task-status " + task.status}></div>
-                                                <div className="task-info">
-                                                    <div className="task-sku">{task.sku}</div>
-                                                    <div className="task-url">{task.url}</div>
-                                                    {task.error && (
-                                                        <div className="task-error">❌ {task.error}</div>
-                                                    )}
-                                                </div>
+                                    {tasks.map((task, index) => (
+                                        <div key={task.id} className={\`task-item \${task.status}\`}>
+                                            <div className={\`task-status \${task.status}\`}></div>
+                                            <div className="task-info">
+                                                <div className="task-sku">{task.sku}</div>
+                                                <div className="task-url">{task.url}</div>
+                                                {task.error && (
+                                                    <div className="task-error">❌ {task.error}</div>
+                                                )}
                                             </div>
-                                        );
-                                    })}
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>
@@ -1553,15 +1551,13 @@ const htmlContent = `
                                             </button>
                                         </div>
                                         <div className="error-log">
-                                            {summary.errors.map(function(error, index) {
-                                                return (
-                                                    <div key={index} className="error-item">
-                                                        <div><strong>{t.errorSKU}</strong> {error.sku}</div>
-                                                        <div><strong>{t.errorURL}</strong> {error.url}</div>
-                                                        <div><strong>{t.errorReason}</strong> {error.error}</div>
-                                                    </div>
-                                                );
-                                            })}
+                                            {summary.errors.map((error, index) => (
+                                                <div key={index} className="error-item">
+                                                    <div><strong>{t.errorSKU}</strong> {error.sku}</div>
+                                                    <div><strong>{t.errorURL}</strong> {error.url}</div>
+                                                    <div><strong>{t.errorReason}</strong> {error.error}</div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                 )}
@@ -1575,4 +1571,4 @@ const htmlContent = `
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
-</html>
+</html>`;
