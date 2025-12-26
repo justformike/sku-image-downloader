@@ -1008,7 +1008,7 @@ const htmlContent = `
                 Object.entries(grouped).forEach(([sku, urls]) => {
                     urls.forEach((url, index) => {
                         taskList.push({
-                            id: `${sku}_${index}`,
+                            id: sku + "_" + index,
                             sku,
                             url,
                             index,
