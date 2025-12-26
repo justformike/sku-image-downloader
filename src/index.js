@@ -1265,7 +1265,7 @@ const htmlContent = `
                 const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = `error_log_${new Date().getTime()}.csv`;
+                link.download = "error_log_" + new Date().getTime() + ".csv";
                 link.click();
             };
 
@@ -1288,24 +1288,23 @@ const htmlContent = `
                                 display: 'flex',
                                 alignItems: 'center'
                             }}>
-                                🌐 {t.language}
-                            </span>
+                                🌐 {t.language}</span>
                             <button
-                                className={`tab ${language === 'zh' ? 'active' : ''}`}
+                                className={"tab " + (language === 'zh' ? 'active' : '')}
                                 onClick={() => setLanguage('zh')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
                                 中文
                             </button>
                             <button
-                                className={`tab ${language === 'en' ? 'active' : ''}`}
+                                className={"tab " + (language === 'en' ? 'active' : '')}
                                 onClick={() => setLanguage('en')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
                                 English
                             </button>
                             <button
-                                className={`tab ${language === 'es' ? 'active' : ''}`}
+                                className={"tab " + (language === 'es' ? 'active' : '')}
                                 onClick={() => setLanguage('es')}
                                 style={{padding: '8px 16px', fontSize: '0.9em'}}
                             >
@@ -1333,13 +1332,13 @@ const htmlContent = `
                         
                         <div className="tabs">
                             <button 
-                                className={`tab ${activeTab === 'file' ? 'active' : ''}`}
+                                className={"tab " + (activeTab === 'file' ? 'active' : '')}
                                 onClick={() => setActiveTab('file')}
                             >
                                 📄 {t.fileUpload}
                             </button>
                             <button 
-                                className={`tab ${activeTab === 'text' ? 'active' : ''}`}
+                                className={"tab " + (activeTab === 'text' ? 'active' : '')}
                                 onClick={() => setActiveTab('text')}
                             >
                                 📝 {t.textPaste}
@@ -1357,7 +1356,7 @@ const htmlContent = `
                                 >
                                     <div className="upload-icon">📤</div>
                                     <div style={{fontSize: '1.1em', marginBottom: '8px'}}>
-                                        {file ? `${t.selectedFile} ${file.name}` : t.clickOrDrag}
+                                        {file ? t.selectedFile + " " + file.name : t.clickOrDrag}
                                     </div>
                                     <div style={{fontSize: '0.9em', color: 'var(--text-secondary)'}}>
                                         {t.supportedFormats}
@@ -1491,14 +1490,14 @@ const htmlContent = `
                             {(isDownloading || isPaused || summary) && (
                                 <div className="progress-section">
                                     <div className="progress-bar-container">
-                                        <div className="progress-bar" style={{width: `${progress}%`}}>
+                                        <div className="progress-bar" style={{width: progress + "%"}}>
                                         </div>
                                         <div className="progress-text">
                                             {progress.toFixed(1)}%
                                         </div>
                                     </div>
                                     <div style={{textAlign: 'center', color: 'var(--text-secondary)'}}>
-                                        {tasks.filter(t => t.status === 'success').length} / {tasks.length} {t.completed}
+                                        {tasks.filter(function(tk) { return tk.status === 'success'; }).length} / {tasks.length} {t.completed}
                                     </div>
                                 </div>
                             )}
@@ -1506,18 +1505,20 @@ const htmlContent = `
                             {tasks.length > 0 && (
                                 <div className="task-list">
                                     <h3 style={{marginBottom: '16px', color: 'var(--text-primary)'}}>📋 {t.taskList}</h3>
-                                    {tasks.map((task, index) => (
-                                        <div key={task.id} className={`task-item ${task.status}`}>
-                                            <div className={`task-status ${task.status}`}></div>
-                                            <div className="task-info">
-                                                <div className="task-sku">{task.sku}</div>
-                                                <div className="task-url">{task.url}</div>
-                                                {task.error && (
-                                                    <div className="task-error">❌ {task.error}</div>
-                                                )}
+                                    {tasks.map(function(task, index) {
+                                        return (
+                                            <div key={task.id} className={"task-item " + task.status}>
+                                                <div className={"task-status " + task.status}></div>
+                                                <div className="task-info">
+                                                    <div className="task-sku">{task.sku}</div>
+                                                    <div className="task-url">{task.url}</div>
+                                                    {task.error && (
+                                                        <div className="task-error">❌ {task.error}</div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             )}
                         </div>
@@ -1551,13 +1552,15 @@ const htmlContent = `
                                             </button>
                                         </div>
                                         <div className="error-log">
-                                            {summary.errors.map((error, index) => (
-                                                <div key={index} className="error-item">
-                                                    <div><strong>{t.errorSKU}</strong> {error.sku}</div>
-                                                    <div><strong>{t.errorURL}</strong> {error.url}</div>
-                                                    <div><strong>{t.errorReason}</strong> {error.error}</div>
-                                                </div>
-                                            ))}
+                                            {summary.errors.map(function(error, index) {
+                                                return (
+                                                    <div key={index} className="error-item">
+                                                        <div><strong>{t.errorSKU}</strong> {error.sku}</div>
+                                                        <div><strong>{t.errorURL}</strong> {error.url}</div>
+                                                        <div><strong>{t.errorReason}</strong> {error.error}</div>
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 )}
@@ -1571,4 +1574,4 @@ const htmlContent = `
         ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
-</html>`;
+</html>
